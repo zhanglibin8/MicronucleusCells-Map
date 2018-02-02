@@ -86,19 +86,42 @@ var handle = (function () {
         var left = 0,top = 0;
         var ww = $('#thumbnail').width();
         var hh = $('#thumbnail').height();
+        var w = $('#Magnifier').width();
+        var h = $('#Magnifier').height();
         //$('#thumbnail').off();
         $('#thumbnail').on('mousedown',function (e) {
             var offx = e.offsetX;
             var offy = e.offsetY;
-            //console.log(offx,offy)
+            console.log(offx,offy);
+            var xy = getXy(offx,offy);
+            console.log(xy);
+            var left = offx - parseFloat($('#Magnifier').width())/2;
+            var top = offy - parseFloat($('#Magnifier').height())/2;
+            //过界判断
+            if(left <= 0){
+                left = 0;
+            }
+            if(left >= ww - w){
+                left = ww - w
+            }
+            if(top <= 0){
+                top = 0
+            }
+            if(top >= hh - h){
+                top = hh - h
+            }
+            $('#Magnifier').css({
+                left: left,
+                top: top
+            });
+            var _xy = getXy(left,top);
+            show(_xy);
             if(e.target.id == 'Magnifier'){//放大镜
                 $(this).on('mousemove',function (e) {
                     //console.log(e)
                     //console.log(e.clientX - $('#thumbnail').offset().left, e.clientY - $('#thumbnail').offset().top);
                     left = e.clientX - $('#thumbnail').offset().left - offx;
                     top = e.clientY - $('#thumbnail').offset().top - offy;
-                    var w = $('#Magnifier').width();
-                    var h = $('#Magnifier').height();
                     //过界判断
                     if(left <= 0){
                         left = 0;
@@ -117,18 +140,21 @@ var handle = (function () {
                         left: left,
                         top: top
                     });
-                    show(getXy(left,top));
+                    var xy = getXy(left,top);
+                    show(xy);
+                    //console.log('mousemove Xy: ',xy)
                 })
             }
         });
         //鼠标抬起后结束移动事件
         $('body').on('mouseup',function (e) {
-            //if(e.target.id == 'Magnifier'){
+            if(e.target.id == 'Magnifier'){
                 $('#thumbnail').off('mousemove');
-                var xy = getXy(left,top)
-                show(xy);
+                var xy = getXy(left,top);
+                //show(xy);
                 curXy = xy;
-            //}
+                console.log('mouseup Xy: ',xy)
+            }
             //console.log(curXy)
         })
     };
@@ -144,7 +170,10 @@ var handle = (function () {
                 left: left - parseFloat($('#Magnifier').width())/2,
                 top: top - parseFloat($('#Magnifier').height())/2
             });
-            show(getXy(left,top));
+            var xy = getXy(left,top);
+            show(xy);
+            curXy = xy;
+            console.log('click Xy: ', xy);
         })
     };
     /**
@@ -338,7 +367,7 @@ var handle = (function () {
                 //var y = Math.floor((top - move_top) / hhh * totalH / 256);
                 var xy = getXy(left - move_left,top - move_top)
                 //console.log(xy);
-                show(xy);
+                //show(xy);
                 curXy = xy;
             }
             //console.log(curXy)
@@ -375,7 +404,7 @@ var handle = (function () {
             //放大镜拖动事件
             dragMagnifierFn();
             //放大镜点击跳转位置事件
-            clickMagnifierFn();
+            // clickMagnifierFn();
             //缩放
             addEvent(window, 'mousewheel', scaleFn);
             addEvent(window, 'DOMMouseScroll', scaleFn);
