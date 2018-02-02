@@ -86,14 +86,14 @@ var handle = (function () {
         var left = 0,top = 0;
         var ww = $('#thumbnail').width();
         var hh = $('#thumbnail').height();
-        var w = $('#Magnifier').width();
-        var h = $('#Magnifier').height();
         //$('#thumbnail').off();
         $('#thumbnail').on('mousedown',function (e) {
             var id = e.target.id;
             var offx = e.offsetX;
             var offy = e.offsetY;
             if(id != 'Magnifier'){//点击位置跳动
+                var w = $('#Magnifier').width();
+                var h = $('#Magnifier').height();
                 // console.log(offx,offy);
                 var xy = getXy(offx,offy);
                 // console.log(xy);
@@ -122,6 +122,8 @@ var handle = (function () {
 
             if(id == 'Magnifier'){//放大镜
                 $(this).on('mousemove',function (e) {
+                    var w = $('#Magnifier').width();
+                    var h = $('#Magnifier').height();
                     //console.log(e)
                     //console.log(e.clientX - $('#thumbnail').offset().left, e.clientY - $('#thumbnail').offset().top);
                     left = e.clientX - $('#thumbnail').offset().left - offx;
@@ -157,8 +159,8 @@ var handle = (function () {
                 var xy = getXy(left,top);
                 //show(xy);
                 curXy = xy;
-                console.log(left,top)
-                console.log('mouseup Xy: ',xy)
+                //console.log(left,top)
+                //console.log('mouseup Xy: ',xy)
             }
             //console.log(curXy)
         })
@@ -322,8 +324,6 @@ var handle = (function () {
      * 平移
      */
     var moveFn = function () {
-        var w = $('#Magnifier').width();
-        var h = $('#Magnifier').height();
         var ww = $('#inner').width();
         var hh = $('#inner').height();
         var www = $('#thumbnail').width();
@@ -332,6 +332,8 @@ var handle = (function () {
         var move_left = 0,move_top = 0;
         $('#hide').off();
         $('#hide').on('mousedown',function (e) {
+            var w = $('#Magnifier').width();
+            var h = $('#Magnifier').height();
             var clientX = e.clientX;
             var clientY = e.clientY;
             left = parseInt($('#Magnifier').css('left'));
