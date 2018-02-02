@@ -90,33 +90,37 @@ var handle = (function () {
         var h = $('#Magnifier').height();
         //$('#thumbnail').off();
         $('#thumbnail').on('mousedown',function (e) {
+            var id = e.target.id;
             var offx = e.offsetX;
             var offy = e.offsetY;
-            console.log(offx,offy);
-            var xy = getXy(offx,offy);
-            console.log(xy);
-            var left = offx - parseFloat($('#Magnifier').width())/2;
-            var top = offy - parseFloat($('#Magnifier').height())/2;
-            //过界判断
-            if(left <= 0){
-                left = 0;
+            if(id != 'Magnifier'){//点击位置跳动
+                // console.log(offx,offy);
+                var xy = getXy(offx,offy);
+                // console.log(xy);
+                var _left = offx - parseFloat($('#Magnifier').width())/2;
+                var _top = offy - parseFloat($('#Magnifier').height())/2;
+                //过界判断
+                if(_left <= 0){
+                    _left = 0;
+                }
+                if(_left >= ww - w){
+                    _left = ww - w
+                }
+                if(_top <= 0){
+                    _top = 0
+                }
+                if(_top >= hh - h){
+                    _top = hh - h
+                }
+                $('#Magnifier').css({
+                    left: _left,
+                    top: _top
+                });
+                var _xy = getXy(_left,_top);
+                show(_xy);
             }
-            if(left >= ww - w){
-                left = ww - w
-            }
-            if(top <= 0){
-                top = 0
-            }
-            if(top >= hh - h){
-                top = hh - h
-            }
-            $('#Magnifier').css({
-                left: left,
-                top: top
-            });
-            var _xy = getXy(left,top);
-            show(_xy);
-            if(e.target.id == 'Magnifier'){//放大镜
+
+            if(id == 'Magnifier'){//放大镜
                 $(this).on('mousemove',function (e) {
                     //console.log(e)
                     //console.log(e.clientX - $('#thumbnail').offset().left, e.clientY - $('#thumbnail').offset().top);
@@ -153,6 +157,7 @@ var handle = (function () {
                 var xy = getXy(left,top);
                 //show(xy);
                 curXy = xy;
+                console.log(left,top)
                 console.log('mouseup Xy: ',xy)
             }
             //console.log(curXy)
@@ -365,7 +370,7 @@ var handle = (function () {
                 $('#hide').off('mousemove');
                 //var x = Math.floor((left - move_left) / www * totalW / 256);
                 //var y = Math.floor((top - move_top) / hhh * totalH / 256);
-                var xy = getXy(left - move_left,top - move_top)
+                var xy = getXy(left - move_left,top - move_top);
                 //console.log(xy);
                 //show(xy);
                 curXy = xy;
